@@ -14,6 +14,7 @@ import { TWITTER_URL } from "@/config";
 import { getAppMetadata, updateAppMetadata } from "../utils/get-app-metadata";
 import { InvoiceForm } from "./invoice-form";
 import { InvoicePDFDownloadLink } from "./invoice-pdf-download-link";
+import { InvoiceEInvoiceDownloadLink } from "./invoice-e-invoice-download-link";
 import type { Dispatch, SetStateAction } from "react";
 
 const DesktopPDFViewerModuleLoading = () => (
@@ -263,6 +264,9 @@ export function InvoiceClientPage({
                 setErrorWhileGeneratingPdfIsShown
               }
               qrCodeDataUrl={qrCodeDataUrl}
+            />
+            <InvoiceEInvoiceDownloadLink
+              invoiceData={invoiceDataState}
             />
           </div>
           {invoiceLastUpdatedAtFormatted && (

@@ -480,6 +480,50 @@ export const TEMPLATE_TO_LABEL = {
   stripe: "Stripe Template",
 } as const satisfies Record<SupportedTemplates, string>;
 
+/**
+ * Supported electronic invoice formats
+ *
+ * Based on the EN 16931 European standard for electronic invoicing:
+ * - "none": No electronic invoice format (default, PDF only)
+ * - "xrechnung": XRechnung (German B2G standard, UBL-based)
+ * - "zugferd-basic": ZUGFeRD 2.1+ BASIC profile
+ * - "zugferd-comfort": ZUGFeRD 2.1+ COMFORT (EN 16931) profile
+ * - "zugferd-extended": ZUGFeRD 2.1+ EXTENDED profile
+ *
+ * @see https://xeinkauf.de/xrechnung/
+ * @see https://www.ferd-net.de/standards/zugferd/index.html
+ */
+export const SUPPORTED_E_INVOICE_FORMATS = [
+  "none",
+  "xrechnung",
+  "zugferd-basic",
+  "zugferd-comfort",
+  "zugferd-extended",
+] as const;
+
+export type SupportedEInvoiceFormats =
+  (typeof SUPPORTED_E_INVOICE_FORMATS)[number];
+
+export const E_INVOICE_FORMAT_TO_LABEL = {
+  none: "None (PDF only)",
+  xrechnung: "XRechnung (UBL)",
+  "zugferd-basic": "ZUGFeRD BASIC",
+  "zugferd-comfort": "ZUGFeRD COMFORT (EN 16931)",
+  "zugferd-extended": "ZUGFeRD EXTENDED",
+} as const satisfies Record<SupportedEInvoiceFormats, string>;
+
+export const E_INVOICE_FORMAT_TO_DESCRIPTION = {
+  none: "Standard PDF invoice without electronic invoice data",
+  xrechnung:
+    "German B2G standard. Generates a UBL 2.1 XML file compliant with XRechnung.",
+  "zugferd-basic":
+    "Basic structured data. Suitable for simple invoices with minimal automation.",
+  "zugferd-comfort":
+    "EN 16931 compliant. Recommended for B2B invoicing in the DACH region.",
+  "zugferd-extended":
+    "Extended data set. Supports additional fields beyond the EN 16931 standard.",
+} as const satisfies Record<SupportedEInvoiceFormats, string>;
+
 export type TemplateLabels =
   (typeof TEMPLATE_TO_LABEL)[keyof typeof TEMPLATE_TO_LABEL];
 
@@ -779,6 +823,22 @@ export const invoiceSchema = z.object({
   dateFormat: z.enum(SUPPORTED_DATE_FORMATS).default("YYYY-MM-DD"),
   currency: z.enum(SUPPORTED_CURRENCIES).default("EUR"),
   template: z.enum(SUPPORTED_TEMPLATES).default("default"),
+
+  /**
+   * Electronic invoice format
+   *
+   * Specifies the e-invoice standard to use for export:
+   * - "none": PDF only (default)
+   * - "xrechnung": XRechnung UBL XML
+   * - "zugferd-basic": ZUGFeRD BASIC profile
+   * - "zugferd-comfort": ZUGFeRD COMFORT (EN 16931) profile
+   * - "zugferd-extended": ZUGFeRD EXTENDED profile
+   */
+  eInvoiceFormat: z
+    .enum(SUPPORTED_E_INVOICE_FORMATS)
+    .optional()
+    .default("none")
+    .describe("Electronic invoice format for export"),
 
   /**
    * Logo field for Stripe template

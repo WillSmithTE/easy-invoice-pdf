@@ -9,11 +9,15 @@ import {
   CURRENCY_SYMBOLS,
   CURRENCY_TO_LABEL,
   DEFAULT_DATE_FORMAT,
+  E_INVOICE_FORMAT_TO_DESCRIPTION,
+  E_INVOICE_FORMAT_TO_LABEL,
   LANGUAGE_TO_LABEL,
   STRIPE_DEFAULT_DATE_FORMAT,
+  SUPPORTED_E_INVOICE_FORMATS,
   SUPPORTED_TEMPLATES,
   TEMPLATE_TO_LABEL,
   type InvoiceData,
+  type SupportedEInvoiceFormats,
 } from "@/app/schema";
 import {
   SUPPORTED_CURRENCIES,
@@ -95,6 +99,7 @@ export const GeneralInformation = memo(function GeneralInformation({
   const template = useWatch({ control, name: "template" });
   const logo = useWatch({ control, name: "logo" });
   const selectedDateFormat = useWatch({ control, name: "dateFormat" });
+  const eInvoiceFormat = useWatch({ control, name: "eInvoiceFormat" });
 
   const t = INVOICE_PDF_TRANSLATIONS[language];
   const defaultInvoiceNumber = `${t.invoiceNumber}:`;
@@ -315,6 +320,52 @@ export const GeneralInformation = memo(function GeneralInformation({
             )}
           </div>
         )}
+
+        {/* Electronic Invoice Format Selection */}
+        <div className="duration-500 animate-in fade-in slide-in-from-bottom-2">
+          <Label htmlFor="eInvoiceFormat" className="mb-1">
+            Electronic Invoice Format
+          </Label>
+          <Controller
+            name="eInvoiceFormat"
+            control={control}
+            render={({ field }) => (
+              <SelectNative
+                {...field}
+                id="eInvoiceFormat"
+                className="block"
+              >
+                {SUPPORTED_E_INVOICE_FORMATS.map((format) => {
+                  const formatLabel = E_INVOICE_FORMAT_TO_LABEL[format];
+
+                  return (
+                    <option key={format} value={format}>
+                      {formatLabel}
+                    </option>
+                  );
+                })}
+              </SelectNative>
+            )}
+          />
+          {errors.eInvoiceFormat ? (
+            <ErrorMessage>{errors.eInvoiceFormat.message}</ErrorMessage>
+          ) : (
+            <InputHelperMessage>
+              {E_INVOICE_FORMAT_TO_DESCRIPTION[
+                (eInvoiceFormat || "none") as SupportedEInvoiceFormats
+              ] || "Select an electronic invoice format for XML export"}
+            </InputHelperMessage>
+          )}
+          {eInvoiceFormat && eInvoiceFormat !== "none" && (
+            <div className="mt-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-800 duration-500 animate-in fade-in slide-in-from-bottom-2">
+              <span className="font-semibold">
+                {E_INVOICE_FORMAT_TO_LABEL[eInvoiceFormat]}
+              </span>{" "}
+              XML export enabled. Use the &quot;Download XML&quot; button to
+              export.
+            </div>
+          )}
+        </div>
 
         {/* Language PDF Select */}
         <div>

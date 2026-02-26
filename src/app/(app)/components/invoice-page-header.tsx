@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { AlertCircleIcon, HeartIcon } from "lucide-react";
 import { useState } from "react";
 import { InvoicePDFDownloadLink } from "@/app/(app)/components/invoice-pdf-download-link";
+import { InvoiceEInvoiceDownloadLink } from "@/app/(app)/components/invoice-e-invoice-download-link";
 
 /**
  * Header component for the invoice page.
@@ -148,6 +149,9 @@ export function InvoicePageHeader({
                   setErrorWhileGeneratingPdfIsShown
                 }
                 qrCodeDataUrl={qrCodeDataUrl}
+              />
+              <InvoiceEInvoiceDownloadLink
+                invoiceData={invoiceDataState}
               />
             </>
           ) : null}

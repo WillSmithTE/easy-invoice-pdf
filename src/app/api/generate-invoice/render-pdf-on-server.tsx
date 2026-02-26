@@ -160,6 +160,7 @@ export const ENGLISH_INVOICE_REAL_DATA = {
 
   template: "default",
   taxLabelText: "VAT",
+  eInvoiceFormat: "none",
 } as const satisfies InvoiceData;
 
 export const POLISH_INVOICE_REAL_DATA = {

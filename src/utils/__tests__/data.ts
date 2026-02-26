@@ -91,4 +91,5 @@ export const MOCK_INVOICE_DATA = {
   personAuthorizedToIssueName: "",
   personAuthorizedToIssueFieldIsVisible: true,
   taxLabelText: "VAT",
+  eInvoiceFormat: "none",
 } as const satisfies InvoiceData;
