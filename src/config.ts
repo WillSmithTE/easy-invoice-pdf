@@ -79,16 +79,23 @@ export const MARKETING_FEATURES_CARDS = [
 
 /**
  * Fonts that we use to render invoice pdf templates via `@react-pdf/renderer`
+ *
+ * These font files (in /public/fonts/) have been processed to remove standard
+ * ligature (liga) GSUB tables to fix a text copying bug where ligature characters
+ * like "fi" in "finance" would be incorrectly copied from the PDF
+ * (e.g., "fnance" instead of "finance").
+ * See: https://github.com/diegomura/react-pdf/issues/915
+ * See: https://github.com/diegomura/react-pdf/issues/3009
  */
 export const INVOICE_PDF_FONTS = {
   DEFAULT_TEMPLATE: {
-    OPEN_SANS_REGULAR: `${STATIC_ASSETS_URL}/open-sans-regular.ttf`,
-    OPEN_SANS_700: `${STATIC_ASSETS_URL}/open-sans-700.ttf`,
+    OPEN_SANS_REGULAR: `${APP_URL}/fonts/OpenSans-Regular.ttf`,
+    OPEN_SANS_700: `${APP_URL}/fonts/OpenSans-Bold.ttf`,
   },
   STRIPE_TEMPLATE: {
-    INTER_REGULAR: `${STATIC_ASSETS_URL}/Inter-Regular.ttf`,
-    INTER_MEDIUM: `${STATIC_ASSETS_URL}/Inter-Medium.ttf`,
-    INTER_SEMIBOLD: `${STATIC_ASSETS_URL}/Inter-SemiBold.ttf`,
+    INTER_REGULAR: `${APP_URL}/fonts/Inter-Regular.ttf`,
+    INTER_MEDIUM: `${APP_URL}/fonts/Inter-Medium.ttf`,
+    INTER_SEMIBOLD: `${APP_URL}/fonts/Inter-SemiBold.ttf`,
   },
 } as const satisfies Record<
   "DEFAULT_TEMPLATE" | "STRIPE_TEMPLATE",
